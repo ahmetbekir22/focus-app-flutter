@@ -3,14 +3,14 @@ import 'package:get/get.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class CustomAudioWidget extends StatelessWidget {
-  final IconData icon;
+  final String imagePath;
   final String audioPath;
   final AudioPlayer audioPlayer;
   final RxBool isPlaying = false.obs;
   final RxDouble volume = 0.5.obs;
 
   CustomAudioWidget({
-    required this.icon,
+    required this.imagePath,
     required this.audioPath,
     required this.audioPlayer,
   });
@@ -21,6 +21,8 @@ class CustomAudioWidget extends StatelessWidget {
     var height = MediaQuery.of(context).size.height;
 
     return Column(
+      mainAxisSize:
+          MainAxisSize.min, // Taşmaları önlemek için mainAxisSize kullanın
       children: [
         GestureDetector(
           onTap: playPauseAudio,
@@ -28,10 +30,17 @@ class CustomAudioWidget extends StatelessWidget {
             () => AnimatedOpacity(
               opacity: volume.value,
               duration: const Duration(milliseconds: 300),
-              child: Icon(
-                icon,
-                size: 75,
-                color: Colors.white,
+              child: SizedBox(
+                width: width * 0.5,
+                height: height * 0.1,
+                child: ClipOval(
+                  child: Image.asset(
+                    imagePath,
+
+                    fit: BoxFit
+                        .cover, // Resmin taşmasını önlemek için fit kullanın
+                  ),
+                ),
               ),
             ),
           ),

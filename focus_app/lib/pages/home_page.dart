@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../components/custom_audio_widget.dart';
-import '../controller/audio_contoller.dart';
 import 'package:audioplayers/audioplayers.dart';
+
+import '../controller/audio_contoller.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -11,19 +12,42 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final audioController = Get.put(AudioController());
 
-    final rainAudioPlayer = AudioPlayer();
-    audioController.registerAudioPlayer(rainAudioPlayer);
-    rainAudioPlayer.setSourceAsset('sounds/rain_voice.mp3');
-    final musicAudioPlayer = AudioPlayer();
-    audioController.registerAudioPlayer(musicAudioPlayer);
-    musicAudioPlayer.setSourceAsset('sounds/cafe_sound.mp3');
+    final List<Map<String, String>> audioFiles = [
+      {
+        'imagePath': 'assets/images/rain.png',
+        'audioPath': 'sounds/rain_voice.mp3'
+      },
+      {
+        'imagePath': 'assets/images/cafe.jpeg',
+        'audioPath': 'sounds/cafe_sound.mp3'
+      },
+      {
+        'imagePath': 'assets/images/fire-icon.jpg',
+        'audioPath': 'sounds/fire_sound.mp3'
+      },
+      {
+        'imagePath': 'assets/images/birds-icon.jpg',
+        'audioPath': 'sounds/birds_sound.mp3'
+      },
+      {
+        'imagePath': 'assets/images/waves.png',
+        'audioPath': 'sounds/waves_sound.mp3'
+      },
+    ];
+
+    final List<AudioPlayer> audioPlayers = audioFiles.map((audioFile) {
+      final player = AudioPlayer();
+      player.setSourceAsset(audioFile['audioPath']!);
+      audioController.registerAudioPlayer(player);
+      return player;
+    }).toList();
 
     return Scaffold(
       appBar: AppBar(
         elevation: 4,
         backgroundColor: const Color.fromARGB(255, 79, 79, 80),
         title: const Text(
-          'Rest Time ',
+          'Rest Time',
           style: TextStyle(
             color: Color.fromARGB(255, 233, 231, 236),
             fontSize: 23,
@@ -32,7 +56,7 @@ class HomePage extends StatelessWidget {
         ),
       ),
       body: Container(
-        color: const Color.fromARGB(255, 142, 142, 144),
+        color: Colors.white,
         child: Column(
           children: [
             Center(
@@ -70,28 +94,13 @@ class HomePage extends StatelessWidget {
                 mainAxisSpacing: 20,
                 crossAxisSpacing: 20,
                 padding: EdgeInsets.zero,
-                children: [
-                  CustomAudioWidget(
-                    icon: Icons.cloud,
-                    audioPath: 'sounds/rain_voice.mp3',
-                    audioPlayer: rainAudioPlayer,
-                  ),
-                  CustomAudioWidget(
-                    icon: Icons.coffee,
-                    audioPath: 'sounds/cafe_sound.mp3',
-                    audioPlayer: musicAudioPlayer,
-                  ),
-                  CustomAudioWidget(
-                    icon: Icons.coffee,
-                    audioPath: 'sounds/cafe_sound.mp3',
-                    audioPlayer: musicAudioPlayer,
-                  ),
-                  CustomAudioWidget(
-                    icon: Icons.coffee,
-                    audioPath: 'sounds/cafe_sound.mp3',
-                    audioPlayer: musicAudioPlayer,
-                  ),
-                ],
+                children: List.generate(audioFiles.length, (index) {
+                  return CustomAudioWidget(
+                    imagePath: audioFiles[index]['imagePath']!,
+                    audioPath: audioFiles[index]['audioPath']!,
+                    audioPlayer: audioPlayers[index],
+                  );
+                }),
               ),
             ),
           ],
