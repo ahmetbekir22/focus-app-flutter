@@ -1,34 +1,25 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:get/get.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class AudioController extends GetxController {
-  final AudioPlayer _audioPlayer = AudioPlayer();
+  final List<AudioPlayer> _audioPlayers = [];
   final RxBool isPlaying = false.obs;
-  final RxDouble volume = 0.5.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    _audioPlayer.setVolume(volume.value);
+  void registerAudioPlayer(AudioPlayer audioPlayer) {
+    _audioPlayers.add(audioPlayer);
   }
 
-  @override
-  void onClose() {
-    _audioPlayer.dispose();
-    super.onClose();
-  }
-
-  void playPauseAudio() {
-    if (isPlaying.value) {
-      _audioPlayer.pause();
-    } else {
-      _audioPlayer.play(AssetSource('sounds/rain_voice.mp3'));
+  void playAll() {
+    for (var player in _audioPlayers) {
+      player.resume();
     }
-    isPlaying.toggle();
+    isPlaying.value = true;
   }
 
-  void setVolume(double newVolume) {
-    volume.value = newVolume;
-    _audioPlayer.setVolume(newVolume);
+  void pauseAll() {
+    for (var player in _audioPlayers) {
+      player.pause();
+    }
+    isPlaying.value = false;
   }
 }

@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../components/custom_audio_widget.dart';
 import '../controller/audio_contoller.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final audioController = Get.put(AudioController());
+
+    final rainAudioPlayer = AudioPlayer();
+    audioController.registerAudioPlayer(rainAudioPlayer);
+
+    final musicAudioPlayer = AudioPlayer();
+    audioController.registerAudioPlayer(musicAudioPlayer);
 
     return Scaffold(
       appBar: AppBar(
@@ -24,32 +32,28 @@ class HomePage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Obx(
-              () => GestureDetector(
-                onTap: audioController.playPauseAudio,
-                child: AnimatedOpacity(
-                  opacity: audioController.volume.value,
-                  duration: const Duration(milliseconds: 300),
-                  child: const Icon(
-                    Icons.cloud,
-                    size: 100,
-                    color: Colors.blue,
-                  ),
-                ),
-              ),
+            CustomAudioWidget(
+              icon: Icons.cloud,
+              audioPath: 'sounds/rain_voice.mp3',
+              audioPlayer: rainAudioPlayer,
             ),
-            Obx(
-              () => Slider(
-                value: audioController.volume.value,
-                onChanged: audioController.setVolume,
-                min: 0.0,
-                max: 1.0,
-              ),
+            CustomAudioWidget(
+              icon: Icons.music_note,
+              audioPath: 'sounds/cafe_sound.mp3',
+              audioPlayer: musicAudioPlayer,
             ),
+            // Diğer sesler için CustomAudioWidget ekleyin.
             Obx(
               () => ElevatedButton(
-                onPressed: audioController.playPauseAudio,
-                child: Text(audioController.isPlaying.value ? 'Pause' : 'Play'),
+                onPressed: () {
+                  if (audioController.isPlaying.value) {
+                    audioController.pauseAll();
+                  } else {
+                    audioController.playAll();
+                  }
+                },
+                child: Text(
+                    audioController.isPlaying.value ? 'Pause All' : 'Play All'),
               ),
             ),
           ],
