@@ -17,6 +17,9 @@ class CustomAudioWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
+
     return Column(
       children: [
         GestureDetector(
@@ -27,29 +30,34 @@ class CustomAudioWidget extends StatelessWidget {
               duration: const Duration(milliseconds: 300),
               child: Icon(
                 icon,
-                size: 100,
-                color: Colors.blue,
+                size: 75,
+                color: Colors.white,
               ),
             ),
           ),
         ),
         Obx(
-          () => Slider(
-            value: volume.value,
-            onChanged: setVolume,
-            min: 0.0,
-            max: 1.0,
+          () => SizedBox(
+            width: width * 0.5,
+            height: height * 0.1,
+            child: Slider(
+              value: volume.value,
+              onChanged: setVolume,
+              min: 0.0,
+              max: 1.0,
+            ),
           ),
         ),
       ],
     );
   }
 
-  void playPauseAudio() {
+  void playPauseAudio() async {
     if (isPlaying.value) {
-      audioPlayer.pause();
+      await audioPlayer.pause();
     } else {
-      audioPlayer.play(AssetSource(audioPath));
+      await audioPlayer.setSourceAsset(audioPath);
+      await audioPlayer.resume();
     }
     isPlaying.toggle();
   }
