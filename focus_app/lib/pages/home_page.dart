@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../components/custom_audio_widget.dart';
 import 'package:audioplayers/audioplayers.dart';
-
-import '../controller/audio_contoller.dart';
+import '../controller/audio_controller.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -14,7 +13,7 @@ class HomePage extends StatelessWidget {
 
     final List<Map<String, String>> audioFiles = [
       {
-        'imagePath': 'assets/images/rain.png',
+        'imagePath': 'assets/images/rain2.jpg',
         'audioPath': 'sounds/rain_voice.mp3'
       },
       {
@@ -38,14 +37,14 @@ class HomePage extends StatelessWidget {
     final List<AudioPlayer> audioPlayers = audioFiles.map((audioFile) {
       final player = AudioPlayer();
       player.setSourceAsset(audioFile['audioPath']!);
+      player.setReleaseMode(ReleaseMode.loop); // Sürekli tekrar modunu ayarla
       audioController.registerAudioPlayer(player);
       return player;
     }).toList();
 
     return Scaffold(
       appBar: AppBar(
-        elevation: 4,
-        backgroundColor: const Color.fromARGB(255, 79, 79, 80),
+        backgroundColor: const Color.fromARGB(255, 105, 131, 145),
         title: const Text(
           'Rest Time',
           style: TextStyle(
@@ -56,7 +55,7 @@ class HomePage extends StatelessWidget {
         ),
       ),
       body: Container(
-        color: Colors.white,
+        color: const Color.fromARGB(255, 244, 246, 247),
         child: Column(
           children: [
             Center(
@@ -87,20 +86,23 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
             Expanded(
-              child: GridView.count(
-                crossAxisCount: 2,
-                mainAxisSpacing: 20,
-                crossAxisSpacing: 20,
-                padding: EdgeInsets.zero,
-                children: List.generate(audioFiles.length, (index) {
-                  return CustomAudioWidget(
-                    imagePath: audioFiles[index]['imagePath']!,
-                    audioPath: audioFiles[index]['audioPath']!,
-                    audioPlayer: audioPlayers[index],
-                  );
-                }),
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: Get.height * 0.01, horizontal: Get.width * 0.01),
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 20,
+                  crossAxisSpacing: 20,
+                  padding: EdgeInsets.zero,
+                  children: List.generate(audioFiles.length, (index) {
+                    return CustomAudioWidget(
+                      imagePath: audioFiles[index]['imagePath']!,
+                      audioPath: audioFiles[index]['audioPath']!,
+                      audioPlayer: audioPlayers[index],
+                    );
+                  }),
+                ),
               ),
             ),
           ],

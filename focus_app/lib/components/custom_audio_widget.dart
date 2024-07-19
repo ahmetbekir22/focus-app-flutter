@@ -21,8 +21,7 @@ class CustomAudioWidget extends StatelessWidget {
     var height = MediaQuery.of(context).size.height;
 
     return Column(
-      mainAxisSize:
-          MainAxisSize.min, // Taşmaları önlemek için mainAxisSize kullanın
+      mainAxisSize: MainAxisSize.min,
       children: [
         GestureDetector(
           onTap: playPauseAudio,
@@ -32,29 +31,24 @@ class CustomAudioWidget extends StatelessWidget {
               duration: const Duration(milliseconds: 300),
               child: SizedBox(
                 width: width * 0.5,
-                height: height * 0.1,
-                child: ClipOval(
-                  child: Image.asset(
-                    imagePath,
-
-                    fit: BoxFit
-                        .cover, // Resmin taşmasını önlemek için fit kullanın
-                  ),
+                height: height * 0.15,
+                child: Image.asset(
+                  imagePath,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
           ),
         ),
         Obx(
-          () => SizedBox(
-            width: width * 0.5,
-            height: height * 0.1,
-            child: Slider(
-              value: volume.value,
-              onChanged: setVolume,
-              min: 0.0,
-              max: 1.0,
-            ),
+          () => Slider(
+            value: volume.value,
+            onChanged: setVolume,
+            min: 0.08,
+            max: 1.0,
+            activeColor: Colors.black54,
+            inactiveColor: Colors.black12,
+            thumbColor: const Color.fromARGB(255, 107, 107, 107),
           ),
         ),
       ],
@@ -66,6 +60,7 @@ class CustomAudioWidget extends StatelessWidget {
       await audioPlayer.pause();
     } else {
       await audioPlayer.setSourceAsset(audioPath);
+      await audioPlayer.setReleaseMode(ReleaseMode.loop);
       await audioPlayer.resume();
     }
     isPlaying.toggle();
