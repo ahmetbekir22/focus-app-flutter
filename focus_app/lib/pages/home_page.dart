@@ -14,30 +14,35 @@ class HomePage extends StatelessWidget {
     final List<Map<String, String>> audioFiles = [
       {
         'imagePath': 'assets/images/rain2.jpg',
-        'audioPath': 'sounds/rain_voice.mp3'
+        'audioPath': 'sounds/rain_voice.mp3',
+        'name': 'Rain'
       },
       {
         'imagePath': 'assets/images/cafe.jpeg',
-        'audioPath': 'sounds/cafe_sound.mp3'
+        'audioPath': 'sounds/cafe_sound.mp3',
+        'name': 'Cafe'
       },
       {
         'imagePath': 'assets/images/fire-icon.jpg',
-        'audioPath': 'sounds/fire_sound.mp3'
+        'audioPath': 'sounds/fire_sound.mp3',
+        'name': 'Fire'
       },
       {
         'imagePath': 'assets/images/birds-icon.jpg',
-        'audioPath': 'sounds/birds_sound.mp3'
+        'audioPath': 'sounds/birds_sound.mp3',
+        'name': 'Birds'
       },
       {
         'imagePath': 'assets/images/waves.png',
-        'audioPath': 'sounds/waves_sound.mp3'
+        'audioPath': 'sounds/waves_sound.mp3',
+        'name': 'Sea Waves'
       },
     ];
 
     final List<AudioPlayer> audioPlayers = audioFiles.map((audioFile) {
       final player = AudioPlayer();
       player.setSourceAsset(audioFile['audioPath']!);
-      player.setReleaseMode(ReleaseMode.loop); // Sürekli tekrar modunu ayarla
+      player.setReleaseMode(ReleaseMode.loop);
       audioController.registerAudioPlayer(player);
       return player;
     }).toList();
@@ -55,7 +60,7 @@ class HomePage extends StatelessWidget {
         ),
       ),
       body: Container(
-        color: const Color.fromARGB(255, 244, 246, 247),
+        color: Colors.white,
         child: Column(
           children: [
             Center(
@@ -90,18 +95,21 @@ class HomePage extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.symmetric(
                     vertical: Get.height * 0.01, horizontal: Get.width * 0.01),
-                child: GridView.count(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 20,
-                  crossAxisSpacing: 20,
-                  padding: EdgeInsets.zero,
-                  children: List.generate(audioFiles.length, (index) {
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 20,
+                  ),
+                  itemCount: audioFiles.length,
+                  itemBuilder: (context, index) {
                     return CustomAudioWidget(
                       imagePath: audioFiles[index]['imagePath']!,
+                      name: audioFiles[index]['name']!,
                       audioPath: audioFiles[index]['audioPath']!,
                       audioPlayer: audioPlayers[index],
                     );
-                  }),
+                  },
                 ),
               ),
             ),

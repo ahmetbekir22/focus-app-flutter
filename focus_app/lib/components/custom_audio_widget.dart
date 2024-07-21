@@ -5,53 +5,71 @@ import 'package:audioplayers/audioplayers.dart';
 class CustomAudioWidget extends StatelessWidget {
   final String imagePath;
   final String audioPath;
+  final String name;
   final AudioPlayer audioPlayer;
   final RxBool isPlaying = false.obs;
   final RxDouble volume = 0.5.obs;
 
   CustomAudioWidget({
+    super.key,
     required this.imagePath,
     required this.audioPath,
     required this.audioPlayer,
+    required this.name,
   });
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height;
-
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        GestureDetector(
-          onTap: playPauseAudio,
-          child: Obx(
-            () => AnimatedOpacity(
-              opacity: volume.value,
-              duration: const Duration(milliseconds: 300),
-              child: SizedBox(
-                width: width * 0.5,
-                height: height * 0.15,
-                child: Image.asset(
-                  imagePath,
-                  fit: BoxFit.cover,
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: Colors.white,
+      ),
+      child: Column(
+        children: [
+          GestureDetector(
+            onTap: playPauseAudio,
+            child: Obx(
+              () => AspectRatio(
+                aspectRatio: 16 / 9,
+                child: AnimatedOpacity(
+                  opacity: volume.value,
+                  duration: const Duration(milliseconds: 150),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                    ),
+                    child: Image.asset(
+                      imagePath,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-        Obx(
-          () => Slider(
-            value: volume.value,
-            onChanged: setVolume,
-            min: 0.08,
-            max: 1.0,
-            activeColor: Colors.black54,
-            inactiveColor: Colors.black12,
-            thumbColor: const Color.fromARGB(255, 107, 107, 107),
+          Text(
+            name,
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+            ),
+            textAlign: TextAlign.center,
           ),
-        ),
-      ],
+          Obx(
+            () => Slider(
+              value: volume.value,
+              onChanged: setVolume,
+              min: 0.08,
+              max: 1.0,
+              activeColor: Colors.black54,
+              inactiveColor: Colors.black12,
+              thumbColor: const Color.fromARGB(255, 107, 107, 107),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
