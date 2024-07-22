@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../components/custom_audio_widget.dart';
 import 'package:audioplayers/audioplayers.dart';
+import '../components/duration_picker.dart';
 import '../controller/audio_controller.dart';
 
 class HomePage extends StatelessWidget {
@@ -67,26 +68,58 @@ class HomePage extends StatelessWidget {
               child: Obx(
                 () => Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: IconButton(
-                    onPressed: () {
-                      if (audioController.isPlaying.value) {
-                        audioController.pauseAll();
-                      } else {
-                        audioController.playAll();
-                      }
-                    },
-                    style: ButtonStyle(
-                      shape: WidgetStateProperty.all(const CircleBorder()),
-                      backgroundColor: WidgetStateProperty.all(
-                          const Color.fromARGB(255, 71, 65, 65)),
-                    ),
-                    icon: Icon(
-                      size: 40,
-                      audioController.isPlaying.value
-                          ? Icons.pause
-                          : Icons.play_arrow,
-                      color: Colors.white,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return DurationPicker(
+                                initialDuration: Duration.zero,
+                                onTimeSelected: (duration) {
+                                  audioController.startTimer(duration);
+                                },
+                              );
+                            },
+                          );
+                        },
+                        icon: const Icon(Icons.timer),
+                        iconSize: 40,
+                        color: Color.fromARGB(255, 98, 97, 97),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          if (audioController.isPlaying.value) {
+                            audioController.pauseAll();
+                          } else {
+                            audioController.playAll();
+                          }
+                        },
+                        icon: Icon(
+                          audioController.isPlaying.value
+                              ? Icons.pause
+                              : Icons.play_arrow,
+                          size: 40,
+                          color: Colors.white,
+                        ),
+                        style: ButtonStyle(
+                          shape: WidgetStateProperty.all(const CircleBorder()),
+                          backgroundColor: WidgetStateProperty.all(
+                              const Color.fromARGB(255, 71, 65, 65)),
+                        ),
+                      ),
+                      Obx(
+                        () => Text(
+                          '${audioController.remainingTime.value.inMinutes}:${(audioController.remainingTime.value.inSeconds % 60).toString().padLeft(2, '0')}',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
