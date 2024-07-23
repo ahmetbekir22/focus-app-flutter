@@ -19,11 +19,11 @@ class SoundSelectionDialog extends StatelessWidget {
       title: const Text('Select Sounds'),
       content: SizedBox(
         width: double.maxFinite,
-        child: Obx(
-          () => ListView.builder(
-            shrinkWrap: true,
-            itemCount: audioFiles.length,
-            itemBuilder: (context, index) {
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: audioFiles.length,
+          itemBuilder: (context, index) {
+            return Obx(() {
               return CheckboxListTile(
                 title: Text(audioFiles[index]['name']!),
                 value: selectedSounds[index],
@@ -31,8 +31,8 @@ class SoundSelectionDialog extends StatelessWidget {
                   selectedSounds[index] = value!;
                 },
               );
-            },
-          ),
+            });
+          },
         ),
       ),
       actions: [
@@ -45,7 +45,7 @@ class SoundSelectionDialog extends StatelessWidget {
                 audioController.pauseAudio(audioFiles[i]['audioPath']!);
               }
             }
-            Navigator.of(context).pop();
+            Get.back();
           },
           child: const Text('OK'),
         ),

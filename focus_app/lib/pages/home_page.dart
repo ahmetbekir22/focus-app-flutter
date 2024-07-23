@@ -4,6 +4,7 @@
 // import 'package:audioplayers/audioplayers.dart';
 // import '../components/duration_picker.dart';
 // import '../controller/audio_controller.dart';
+// import 'sound_selection.dart';
 
 // class HomePage extends StatelessWidget {
 //   const HomePage({super.key});
@@ -44,7 +45,7 @@
 //       final player = AudioPlayer();
 //       player.setSourceAsset(audioFile['audioPath']!);
 //       player.setReleaseMode(ReleaseMode.loop);
-//       audioController.registerAudioPlayer(player);
+//       audioController.registerAudioPlayer(player, audioFile['audioPath']!);
 //       return player;
 //     }).toList();
 
@@ -65,47 +66,47 @@
 //         child: Column(
 //           children: [
 //             Center(
-//               child: Obx(
-//                 () => Padding(
-//                   padding: const EdgeInsets.all(8.0),
-//                   child: Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                     children: [
-//                       Column(
-//                         children: [
-//                           Padding(
-//                             padding: EdgeInsets.only(top: Get.height * 0.01),
-//                             child: IconButton(
-//                               onPressed: () {
-//                                 showDialog(
-//                                   context: context,
-//                                   builder: (context) {
-//                                     return DurationPicker(
-//                                       initialDuration: Duration.zero,
-//                                       onTimeSelected: (duration) {
-//                                         audioController.startTimer(duration);
-//                                       },
-//                                     );
-//                                   },
-//                                 );
-//                               },
-//                               icon: const Icon(Icons.timer),
-//                               iconSize: 40,
-//                               color: const Color.fromARGB(255, 71, 65, 65),
+//               child: Padding(
+//                 padding: const EdgeInsets.all(8.0),
+//                 child: Row(
+//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                   children: [
+//                     Column(
+//                       children: [
+//                         Padding(
+//                           padding: EdgeInsets.only(top: Get.height * 0.01),
+//                           child: IconButton(
+//                             onPressed: () {
+//                               showDialog(
+//                                 context: context,
+//                                 builder: (context) {
+//                                   return DurationPicker(
+//                                     initialDuration: Duration.zero,
+//                                     onTimeSelected: (duration) {
+//                                       audioController.startTimer(duration);
+//                                     },
+//                                   );
+//                                 },
+//                               );
+//                             },
+//                             icon: const Icon(Icons.timer),
+//                             iconSize: 40,
+//                             color: const Color.fromARGB(255, 71, 65, 65),
+//                           ),
+//                         ),
+//                         Obx(
+//                           () => Text(
+//                             '${audioController.remainingTime.value.inMinutes}:${(audioController.remainingTime.value.inSeconds % 60).toString().padLeft(2, '0')}',
+//                             style: const TextStyle(
+//                               fontSize: 20,
+//                               color: Color.fromARGB(255, 71, 65, 65),
 //                             ),
 //                           ),
-//                           Obx(
-//                             () => Text(
-//                               '${audioController.remainingTime.value.inMinutes}:${(audioController.remainingTime.value.inSeconds % 60).toString().padLeft(2, '0')}',
-//                               style: const TextStyle(
-//                                 fontSize: 20,
-//                                 color: Color.fromARGB(255, 71, 65, 65),
-//                               ),
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                       IconButton(
+//                         ),
+//                       ],
+//                     ),
+//                     Obx(
+//                       () => IconButton(
 //                         onPressed: () {
 //                           if (audioController.isPlaying.value) {
 //                             audioController.pauseAll();
@@ -126,16 +127,24 @@
 //                               const Color.fromARGB(255, 71, 65, 65)),
 //                         ),
 //                       ),
-//                       IconButton(
-//                         onPressed: () {
-//                           //bu butona tıklayınca kullanıcı sesler içinden istediği sesleri seçip dinleyebilecek
-//                         },
-//                         icon: const Icon(Icons.menu_open),
-//                         iconSize: 45,
-//                         color: const Color.fromARGB(255, 71, 65, 65),
-//                       ),
-//                     ],
-//                   ),
+//                     ),
+//                     IconButton(
+//                       onPressed: () {
+//                         showDialog(
+//                           context: context,
+//                           builder: (context) {
+//                             return SoundSelectionDialog(
+//                               audioFiles: audioFiles,
+//                               audioController: audioController,
+//                             );
+//                           },
+//                         );
+//                       },
+//                       icon: const Icon(Icons.queue_music_outlined),
+//                       iconSize: 40,
+//                       color: const Color.fromARGB(255, 71, 65, 65),
+//                     ),
+//                   ],
 //                 ),
 //               ),
 //             ),
@@ -167,6 +176,7 @@
 //     );
 //   }
 // }
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../components/custom_audio_widget.dart';
@@ -272,6 +282,20 @@ class HomePage extends StatelessWidget {
                             ),
                           ),
                         ),
+                        Obx(
+                          () => Visibility(
+                            visible: audioController.remainingTime.value >
+                                Duration.zero,
+                            child: IconButton(
+                              onPressed: () {
+                                audioController.stopTimer();
+                              },
+                              icon: const Icon(Icons.stop),
+                              iconSize: 40,
+                              color: const Color.fromARGB(255, 71, 65, 65),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                     Obx(
@@ -310,7 +334,7 @@ class HomePage extends StatelessWidget {
                           },
                         );
                       },
-                      icon: const Icon(Icons.menu_book),
+                      icon: const Icon(Icons.queue_music_outlined),
                       iconSize: 40,
                       color: const Color.fromARGB(255, 71, 65, 65),
                     ),
