@@ -5,10 +5,12 @@ import '../controller/audio_controller.dart';
 class SoundSelectionDialog extends StatelessWidget {
   final List<Map<String, String>> audioFiles;
   final AudioController audioController;
+  final ValueNotifier<List<bool>> selectedSoundsNotifier;
 
   SoundSelectionDialog({
     required this.audioFiles,
     required this.audioController,
+    required this.selectedSoundsNotifier,
   });
 
   @override
@@ -45,6 +47,7 @@ class SoundSelectionDialog extends StatelessWidget {
                 audioController.pauseAudio(audioFiles[i]['audioPath']!);
               }
             }
+            selectedSoundsNotifier.value = selectedSounds.toList();
             Get.back();
           },
           child: const Text('OK'),

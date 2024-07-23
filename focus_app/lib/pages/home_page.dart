@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:focus_app/data/audios.dart';
 import 'package:get/get.dart';
 import '../components/custom_audio_widget.dart';
 import 'package:audioplayers/audioplayers.dart';
 import '../components/duration_picker.dart';
 import '../controller/audio_controller.dart';
+import '../data/audios.dart';
 import 'sound_selection.dart';
 
 class HomePage extends StatelessWidget {
@@ -13,16 +13,19 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final audioController = Get.put(AudioController());
-    final Audios soundsList = Audios();
+    final audioList = Audios();
 
     final List<AudioPlayer> audioPlayers =
-        soundsList.audioFiles.map((audioFile) {
+        audioList.audioFiles.map((audioFile) {
       final player = AudioPlayer();
       player.setSourceAsset(audioFile['audioPath']!);
       player.setReleaseMode(ReleaseMode.loop);
       audioController.registerAudioPlayer(player, audioFile['audioPath']!);
       return player;
     }).toList();
+
+    final selectedSoundsNotifier = ValueNotifier<List<bool>>(
+        List.filled(audioList.audioFiles.length, true));
 
     return Scaffold(
       appBar: AppBar(
@@ -87,8 +90,8 @@ class HomePage extends StatelessWidget {
                                 audioController.stopTimer();
                               },
                               icon: const Icon(Icons.stop),
-                              iconSize: 30,
-                              color: const Color.fromARGB(255, 235, 23, 23),
+                              iconSize: 40,
+                              color: const Color.fromARGB(255, 71, 65, 65),
                             ),
                           ),
                         ),
@@ -123,8 +126,9 @@ class HomePage extends StatelessWidget {
                           context: context,
                           builder: (context) {
                             return SoundSelectionDialog(
-                              audioFiles: soundsList.audioFiles,
+                              audioFiles: audioList.audioFiles,
                               audioController: audioController,
+                              selectedSoundsNotifier: selectedSoundsNotifier,
                             );
                           },
                         );
@@ -141,19 +145,29 @@ class HomePage extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.symmetric(
                     vertical: Get.height * 0.01, horizontal: Get.width * 0.01),
-                child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: Get.height * 0.03,
-                    crossAxisSpacing: Get.width * 0.03,
-                  ),
-                  itemCount: soundsList.audioFiles.length,
-                  itemBuilder: (context, index) {
-                    return CustomAudioWidget(
-                      imagePath: soundsList.audioFiles[index]['imagePath']!,
-                      name: soundsList.audioFiles[index]['name']!,
-                      audioPath: soundsList.audioFiles[index]['audioPath']!,
-                      audioPlayer: audioPlayers[index],
+                child: ValueListenableBuilder<List<bool>>(
+                  valueListenable: selectedSoundsNotifier,
+                  builder: (context, selectedSounds, child) {
+                    return GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: Get.height * 0.02,
+                        crossAxisSpacing: Get.width * 0.02,
+                      ),
+                      itemCount: audioList.audioFiles.length,
+                      itemBuilder: (context, index) {
+                        return Opacity(
+                          opacity: selectedSounds[index] ? 1.0 : 0.5,
+                          child: CustomAudioWidget(
+                            imagePath: audioList.audioFiles[index]
+                                ['imagePath']!,
+                            name: audioList.audioFiles[index]['name']!,
+                            audioPath: audioList.audioFiles[index]
+                                ['audioPath']!,
+                            audioPlayer: audioPlayers[index],
+                          ),
+                        );
+                      },
                     );
                   },
                 ),
