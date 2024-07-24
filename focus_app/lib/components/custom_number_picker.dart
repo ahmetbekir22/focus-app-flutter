@@ -9,12 +9,12 @@ class CustomNumberPicker extends StatelessWidget {
   final RxInt currentValue;
 
   const CustomNumberPicker({
-    Key? key,
+    super.key,
     required this.label,
     required this.minValue,
     required this.maxValue,
     required this.currentValue,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

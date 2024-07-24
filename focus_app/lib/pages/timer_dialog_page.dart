@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class TimerDialog extends StatelessWidget {
   final Function(Duration) onTimeSelected;
 
-  TimerDialog({required this.onTimeSelected});
+  const TimerDialog({super.key, required this.onTimeSelected});
 
   @override
   Widget build(BuildContext context) {

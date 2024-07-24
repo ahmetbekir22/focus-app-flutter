@@ -7,7 +7,8 @@ class SoundSelectionDialog extends StatelessWidget {
   final AudioController audioController;
   final ValueNotifier<List<bool>> selectedSoundsNotifier;
 
-  SoundSelectionDialog({
+  const SoundSelectionDialog({
+    super.key,
     required this.audioFiles,
     required this.audioController,
     required this.selectedSoundsNotifier,
