@@ -11,20 +11,30 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final audioController = Get.put(AudioController());
     final audioList = Audios();
-
     final List<AudioPlayer> audioPlayers =
         audioList.audioFiles.map((audioFile) {
       final player = AudioPlayer();
       player.setSourceAsset(audioFile['audioPath']!);
       player.setReleaseMode(ReleaseMode.loop);
-      audioController.registerAudioPlayer(player, audioFile['audioPath']!);
       return player;
     }).toList();
 
     final selectedSoundsNotifier = ValueNotifier<List<bool>>(
-        List.filled(audioList.audioFiles.length, true));
+      List.filled(audioList.audioFiles.length, true),
+    );
+
+    // Initialize AudioController with paths and selected sounds
+    final audioController = Get.put(AudioController(
+      audioPaths: audioList.audioFiles.map((e) => e['audioPath']!).toList(),
+      selectedSounds: List.filled(audioList.audioFiles.length, true),
+    ));
+
+    // Register audio players to the controller
+    for (int i = 0; i < audioPlayers.length; i++) {
+      audioController.registerAudioPlayer(
+          audioPlayers[i], audioList.audioFiles[i]['audioPath']!);
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -73,6 +83,8 @@ class HomePage extends StatelessWidget {
                                 List<bool>.from(selectedSoundsNotifier.value);
                             updatedSounds[index] = !updatedSounds[index];
                             selectedSoundsNotifier.value = updatedSounds;
+                            // Update the audio controller with the new selection
+                            audioController.playSelected(updatedSounds);
                           },
                           child: Opacity(
                             opacity: selectedSounds[index] ? 1.0 : 0.5,

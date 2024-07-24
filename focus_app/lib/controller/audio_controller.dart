@@ -5,8 +5,16 @@ import 'package:get/get.dart';
 class AudioController extends GetxController {
   var isPlaying = false.obs;
   var remainingTime = Duration.zero.obs;
+  final List<String> audioPaths;
+  final List<bool> selectedSounds;
+
   final Map<String, AudioPlayer> _audioPathToPlayer = {};
   Timer? _timer;
+
+  AudioController({
+    required this.audioPaths,
+    required this.selectedSounds,
+  });
 
   void registerAudioPlayer(AudioPlayer player, String audioPath) {
     _audioPathToPlayer[audioPath] = player;
@@ -14,7 +22,7 @@ class AudioController extends GetxController {
 
   void startTimer(Duration duration) {
     remainingTime.value = duration;
-    playAll();
+    playSelected(selectedSounds);
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (remainingTime.value.inSeconds <= 0) {
@@ -57,9 +65,23 @@ class AudioController extends GetxController {
     player?.pause();
   }
 
-  // @override // I will check this later.
-  // void onClose() {
-  //   _timer?.cancel();
-  //   super.onClose();
-  // }
+  void playSelected(List<bool> selectedSounds) {
+    for (int i = 0; i < audioPaths.length; i++) {
+      final audioPath = audioPaths[i];
+      if (selectedSounds[i]) {
+        // Seçili ses dosyasını çal
+        playAudio(audioPath);
+      } else {
+        // Seçili olmayan ses dosyasını duraklat
+        pauseAudio(audioPath);
+      }
+    }
+    isPlaying.value = selectedSounds.contains(true);
+  }
+
+  @override
+  void onClose() {
+    _timer?.cancel();
+    super.onClose();
+  }
 }
