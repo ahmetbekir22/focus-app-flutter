@@ -28,22 +28,19 @@ class CustomAudioWidget extends StatelessWidget {
       ),
       child: Column(
         children: [
-          GestureDetector(
-            onTap: playPauseAudio,
-            child: Obx(
-              () => AspectRatio(
-                aspectRatio: 16 / 9,
-                child: AnimatedOpacity(
-                  opacity: volume.value,
-                  duration: const Duration(milliseconds: 150),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                    ),
-                    child: Image.asset(
-                      imagePath,
-                      fit: BoxFit.cover,
-                    ),
+          Obx(
+            () => AspectRatio(
+              aspectRatio: 16 / 9,
+              child: AnimatedOpacity(
+                opacity: volume.value,
+                duration: const Duration(milliseconds: 150),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                  ),
+                  child: Image.asset(
+                    imagePath,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),

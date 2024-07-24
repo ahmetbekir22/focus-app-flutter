@@ -24,13 +24,11 @@ class HomePage extends StatelessWidget {
       List.filled(audioList.audioFiles.length, true),
     );
 
-    // Initialize AudioController with paths and selected sounds
     final audioController = Get.put(AudioController(
       audioPaths: audioList.audioFiles.map((e) => e['audioPath']!).toList(),
       selectedSounds: List.filled(audioList.audioFiles.length, true),
     ));
 
-    // Register audio players to the controller
     for (int i = 0; i < audioPlayers.length; i++) {
       audioController.registerAudioPlayer(
           audioPlayers[i], audioList.audioFiles[i]['audioPath']!);
@@ -77,25 +75,15 @@ class HomePage extends StatelessWidget {
                       ),
                       itemCount: audioList.audioFiles.length,
                       itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            final updatedSounds =
-                                List<bool>.from(selectedSoundsNotifier.value);
-                            updatedSounds[index] = !updatedSounds[index];
-                            selectedSoundsNotifier.value = updatedSounds;
-                            // Update the audio controller with the new selection
-                            audioController.playSelected(updatedSounds);
-                          },
-                          child: Opacity(
-                            opacity: selectedSounds[index] ? 1.0 : 0.5,
-                            child: CustomAudioWidget(
-                              imagePath: audioList.audioFiles[index]
-                                  ['imagePath']!,
-                              name: audioList.audioFiles[index]['name']!,
-                              audioPath: audioList.audioFiles[index]
-                                  ['audioPath']!,
-                              audioPlayer: audioPlayers[index],
-                            ),
+                        return Opacity(
+                          opacity: selectedSounds[index] ? 1.0 : 0.5,
+                          child: CustomAudioWidget(
+                            imagePath: audioList.audioFiles[index]
+                                ['imagePath']!,
+                            name: audioList.audioFiles[index]['name']!,
+                            audioPath: audioList.audioFiles[index]
+                                ['audioPath']!,
+                            audioPlayer: audioPlayers[index],
                           ),
                         );
                       },
