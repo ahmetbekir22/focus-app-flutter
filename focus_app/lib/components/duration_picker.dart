@@ -57,7 +57,7 @@ class DurationPicker extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Get.back();
           },
           child: const Text(
             'Cancel',
@@ -70,7 +70,7 @@ class DurationPicker extends StatelessWidget {
         TextButton(
           onPressed: () {
             onTimeSelected(durationController.duration);
-            Navigator.of(context).pop();
+            Get.back();
           },
           child: const Text(
             'Set',
