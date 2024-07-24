@@ -51,7 +51,12 @@ class SoundSelectionDialog extends StatelessWidget {
             selectedSoundsNotifier.value = selectedSounds.toList();
             Get.back();
           },
-          child: const Text('OK'),
+          child: const Text('OK',
+              style: TextStyle(
+                color: Color.fromARGB(255, 105, 131, 145),
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              )),
         ),
       ],
     );

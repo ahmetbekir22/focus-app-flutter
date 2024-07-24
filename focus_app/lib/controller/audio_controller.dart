@@ -69,10 +69,8 @@ class AudioController extends GetxController {
     for (int i = 0; i < audioPaths.length; i++) {
       final audioPath = audioPaths[i];
       if (selectedSounds[i]) {
-        // Seçili ses dosyasını çal
         playAudio(audioPath);
       } else {
-        // Seçili olmayan ses dosyasını duraklat
         pauseAudio(audioPath);
       }
     }
