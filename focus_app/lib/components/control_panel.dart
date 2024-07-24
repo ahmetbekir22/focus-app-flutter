@@ -6,16 +6,16 @@ import '../data/audios.dart';
 import '../pages/sound_selection.dart';
 
 class ControlPanel extends StatelessWidget {
-  final AudioController audioController;
   final Audios audioList;
   final ValueNotifier<List<bool>> selectedSoundsNotifier;
 
-  const ControlPanel({
+  ControlPanel({
     super.key,
-    required this.audioController,
     required this.audioList,
     required this.selectedSoundsNotifier,
   });
+
+  final AudioController audioController = Get.find<AudioController>();
 
   bool isCustomMixActive(List<bool> selectedSounds) {
     return selectedSounds.any((isSelected) => !isSelected);
@@ -73,27 +73,6 @@ class ControlPanel extends StatelessWidget {
             ),
           ],
         ),
-        // Obx(
-        //   () => IconButton(
-        //     onPressed: () {
-        //       if (audioController.isPlaying.value) {
-        //         audioController.pauseAll();
-        //       } else {
-        //         audioController.playAll();
-        //       }
-        //     },
-        //     icon: Icon(
-        //       audioController.isPlaying.value ? Icons.pause : Icons.play_arrow,
-        //       size: 40,
-        //       color: Colors.white,
-        //     ),
-        //     style: ButtonStyle(
-        //       shape: WidgetStateProperty.all(const CircleBorder()),
-        //       backgroundColor: WidgetStateProperty.all(
-        //           const Color.fromARGB(255, 71, 65, 65)),
-        //     ),
-        //   ),
-        // ),
         Obx(
           () => IconButton(
             onPressed: () {
@@ -109,13 +88,12 @@ class ControlPanel extends StatelessWidget {
               color: Colors.white,
             ),
             style: ButtonStyle(
-              shape: WidgetStateProperty.all(const CircleBorder()),
-              backgroundColor: WidgetStateProperty.all(
+              shape: MaterialStateProperty.all(const CircleBorder()),
+              backgroundColor: MaterialStateProperty.all(
                   const Color.fromARGB(255, 71, 65, 65)),
             ),
           ),
         ),
-
         Column(children: [
           IconButton(
             onPressed: () {

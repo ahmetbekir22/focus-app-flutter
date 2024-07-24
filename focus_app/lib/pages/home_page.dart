@@ -54,7 +54,7 @@ class HomePage extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ControlPanel(
-                  audioController: audioController,
+                  //audioController: audioController,
                   audioList: audioList,
                   selectedSoundsNotifier: selectedSoundsNotifier,
                 ),

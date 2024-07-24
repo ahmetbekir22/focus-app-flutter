@@ -80,6 +80,9 @@ class AudioController extends GetxController {
   @override
   void onClose() {
     _timer?.cancel();
+    for (var player in _audioPathToPlayer.values) {
+      player.dispose();
+    }
     super.onClose();
   }
 }
