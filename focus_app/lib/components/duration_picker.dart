@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:numberpicker/numberpicker.dart';
 import 'package:get/get.dart';
 import '../controller/duration_controller.dart';
+import 'custom_number_picker.dart';
 
 class DurationPicker extends StatelessWidget {
   final Duration initialDuration;
@@ -19,53 +19,36 @@ class DurationPicker extends StatelessWidget {
     durationController.setInitialDuration(initialDuration);
 
     return AlertDialog(
-      title: const Text('Set Duration'),
+      title: const Text(
+        'Set Duration',
+        style: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          color: Color(0xFF4A4A4A),
+        ),
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             children: [
-              Expanded(
-                child: Column(
-                  children: [
-                    const Text('Hours'),
-                    Obx(() => NumberPicker(
-                          value: durationController.hours.value,
-                          minValue: 0,
-                          maxValue: 23,
-                          onChanged: (value) =>
-                              durationController.hours.value = value,
-                        )),
-                  ],
-                ),
+              CustomNumberPicker(
+                label: 'Hours',
+                minValue: 0,
+                maxValue: 23,
+                currentValue: durationController.hours,
               ),
-              Expanded(
-                child: Column(
-                  children: [
-                    const Text('Minutes'),
-                    Obx(() => NumberPicker(
-                          value: durationController.minutes.value,
-                          minValue: 0,
-                          maxValue: 59,
-                          onChanged: (value) =>
-                              durationController.minutes.value = value,
-                        )),
-                  ],
-                ),
+              CustomNumberPicker(
+                label: 'Minutes',
+                minValue: 0,
+                maxValue: 59,
+                currentValue: durationController.minutes,
               ),
-              Expanded(
-                child: Column(
-                  children: [
-                    const Text('Seconds'),
-                    Obx(() => NumberPicker(
-                          value: durationController.seconds.value,
-                          minValue: 0,
-                          maxValue: 59,
-                          onChanged: (value) =>
-                              durationController.seconds.value = value,
-                        )),
-                  ],
-                ),
+              CustomNumberPicker(
+                label: 'Seconds',
+                minValue: 0,
+                maxValue: 59,
+                currentValue: durationController.seconds,
               ),
             ],
           ),
@@ -76,16 +59,32 @@ class DurationPicker extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Cancel'),
+          child: const Text(
+            'Cancel',
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.redAccent,
+            ),
+          ),
         ),
         TextButton(
           onPressed: () {
             onTimeSelected(durationController.duration);
             Navigator.of(context).pop();
           },
-          child: const Text('Set'),
+          child: const Text(
+            'Set',
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.green,
+            ),
+          ),
         ),
       ],
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      backgroundColor: const Color(0xFFF9F9F9),
     );
   }
 }
