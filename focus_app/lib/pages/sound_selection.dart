@@ -19,7 +19,15 @@ class SoundSelectionDialog extends StatelessWidget {
     final selectedSounds = List<bool>.filled(audioFiles.length, false).obs;
 
     return AlertDialog(
-      title: const Text('Select Sounds'),
+      title: Padding(
+        padding: EdgeInsets.symmetric(horizontal: Get.width * 0.15),
+        child: const Text('Select Sounds'),
+      ),
+      titleTextStyle: const TextStyle(
+        color: Color.fromARGB(255, 51, 101, 128),
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+      ),
       content: SizedBox(
         width: double.maxFinite,
         child: ListView.builder(
