@@ -5,7 +5,6 @@ import '../components/custom_audio_widget.dart';
 import 'package:audioplayers/audioplayers.dart';
 import '../controller/audio_controller.dart';
 import '../data/audios.dart';
-import '../services/notification_service.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

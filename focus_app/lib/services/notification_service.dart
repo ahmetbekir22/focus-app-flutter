@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationService {
@@ -23,10 +25,15 @@ class NotificationService {
   }
 
   notificationDetails() {
-    return const NotificationDetails(
+    var vibrationPattern = Int64List.fromList([0, 1000, 500, 1000]);
+    //print("titreşim açıldı");
+    return NotificationDetails(
         android: AndroidNotificationDetails('channelId', 'channelName',
-            importance: Importance.max),
-        iOS: DarwinNotificationDetails());
+            importance: Importance.max,
+            priority: Priority.high,
+            vibrationPattern: vibrationPattern,
+            enableVibration: true),
+        iOS: const DarwinNotificationDetails());
   }
 
   Future showNotification(
