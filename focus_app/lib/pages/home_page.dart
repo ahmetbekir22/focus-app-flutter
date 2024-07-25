@@ -5,6 +5,7 @@ import '../components/custom_audio_widget.dart';
 import 'package:audioplayers/audioplayers.dart';
 import '../controller/audio_controller.dart';
 import '../data/audios.dart';
+import '../services/notification_service.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -33,6 +34,12 @@ class HomePage extends StatelessWidget {
       audioController.registerAudioPlayer(
           audioPlayers[i], audioList.audioFiles[i]['audioPath']!);
     }
+    // final notificationService =
+    //     NotificationService(); // Create an instance of NotificationService
+
+    // void onTimerComplete() {
+    //   notificationService.showNotification('Timer Bitti', 'Timer sona erdi.');
+    // }
 
     return Scaffold(
       appBar: AppBar(
@@ -46,54 +53,48 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-      body: Container(
-        color: Colors.white,
-        child: Column(
-          children: [
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ControlPanel(
-                  //audioController: audioController,
-                  audioList: audioList,
-                  selectedSoundsNotifier: selectedSoundsNotifier,
-                ),
+      body: Column(
+        children: [
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ControlPanel(
+                audioList: audioList,
+                selectedSoundsNotifier: selectedSoundsNotifier,
               ),
             ),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: Get.height * 0.01, horizontal: Get.width * 0.01),
-                child: ValueListenableBuilder<List<bool>>(
-                  valueListenable: selectedSoundsNotifier,
-                  builder: (context, selectedSounds, child) {
-                    return GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: Get.height * 0.02,
-                        crossAxisSpacing: Get.width * 0.02,
-                      ),
-                      itemCount: audioList.audioFiles.length,
-                      itemBuilder: (context, index) {
-                        return Opacity(
-                          opacity: selectedSounds[index] ? 1.0 : 0.5,
-                          child: CustomAudioWidget(
-                            imagePath: audioList.audioFiles[index]
-                                ['imagePath']!,
-                            name: audioList.audioFiles[index]['name']!,
-                            audioPath: audioList.audioFiles[index]
-                                ['audioPath']!,
-                            audioPlayer: audioPlayers[index],
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                  vertical: Get.height * 0.01, horizontal: Get.width * 0.01),
+              child: ValueListenableBuilder<List<bool>>(
+                valueListenable: selectedSoundsNotifier,
+                builder: (context, selectedSounds, child) {
+                  return GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: Get.height * 0.02,
+                      crossAxisSpacing: Get.width * 0.02,
+                    ),
+                    itemCount: audioList.audioFiles.length,
+                    itemBuilder: (context, index) {
+                      return Opacity(
+                        opacity: selectedSounds[index] ? 1.0 : 0.5,
+                        child: CustomAudioWidget(
+                          imagePath: audioList.audioFiles[index]['imagePath']!,
+                          name: audioList.audioFiles[index]['name']!,
+                          audioPath: audioList.audioFiles[index]['audioPath']!,
+                          audioPlayer: audioPlayers[index],
+                        ),
+                      );
+                    },
+                  );
+                },
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

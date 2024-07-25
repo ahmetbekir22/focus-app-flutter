@@ -24,7 +24,6 @@ class CustomAudioWidget extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
-        color: Colors.white,
       ),
       child: Column(
         children: [
@@ -32,11 +31,11 @@ class CustomAudioWidget extends StatelessWidget {
             () => AspectRatio(
               aspectRatio: 16 / 9,
               child: AnimatedOpacity(
-                opacity: volume.value,
+                opacity: volume.value == 0 ? 0.1 : volume.value,
                 duration: const Duration(milliseconds: 150),
                 child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
                   ),
                   child: Image.asset(
                     imagePath,
@@ -58,7 +57,7 @@ class CustomAudioWidget extends StatelessWidget {
             () => Slider(
               value: volume.value,
               onChanged: setVolume,
-              min: 0.08,
+              min: 0,
               max: 1.0,
               activeColor: Colors.black54,
               inactiveColor: Colors.black12,
@@ -70,16 +69,16 @@ class CustomAudioWidget extends StatelessWidget {
     );
   }
 
-  void playPauseAudio() async {
-    if (isPlaying.value) {
-      await audioPlayer.pause();
-    } else {
-      await audioPlayer.setSourceAsset(audioPath);
-      await audioPlayer.setReleaseMode(ReleaseMode.loop);
-      await audioPlayer.resume();
-    }
-    isPlaying.toggle();
-  }
+  // void playPauseAudio() async {
+  //   if (isPlaying.value) {
+  //     await audioPlayer.pause();
+  //   } else {
+  //     await audioPlayer.setSourceAsset(audioPath);
+  //     await audioPlayer.setReleaseMode(ReleaseMode.loop);
+  //     await audioPlayer.resume();
+  //   }
+  //   isPlaying.toggle();
+  // }
 
   void setVolume(double newVolume) {
     volume.value = newVolume;

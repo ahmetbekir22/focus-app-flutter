@@ -38,6 +38,7 @@ dependencies:
   audioplayers: ^6.0.0
   get: ^4.6.6
   numberpicker: ^2.1.2
+  flutter_local_notifications: ^17.2.1+2
 
 dev_dependencies:
   flutter_test:
