@@ -34,12 +34,6 @@ class HomePage extends StatelessWidget {
       audioController.registerAudioPlayer(
           audioPlayers[i], audioList.audioFiles[i]['audioPath']!);
     }
-    // final notificationService =
-    //     NotificationService(); // Create an instance of NotificationService
-
-    // void onTimerComplete() {
-    //   notificationService.showNotification('Timer Bitti', 'Timer sona erdi.');
-    // }
 
     return Scaffold(
       appBar: AppBar(

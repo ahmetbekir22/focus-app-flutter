@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:get/get.dart';
 
+import '../services/notification_service.dart';
+
 class AudioController extends GetxController {
   var isPlaying = false.obs;
   var remainingTime = Duration.zero.obs;
@@ -11,10 +13,18 @@ class AudioController extends GetxController {
   final Map<String, AudioPlayer> _audioPathToPlayer = {};
   Timer? _timer;
 
+  final notification = NotificationService();
+
   AudioController({
     required this.audioPaths,
     required this.selectedSounds,
   });
+
+  @override
+  void onInit() {
+    super.onInit();
+    notification.initNotification();
+  }
 
   void registerAudioPlayer(AudioPlayer player, String audioPath) {
     _audioPathToPlayer[audioPath] = player;
@@ -28,6 +38,10 @@ class AudioController extends GetxController {
       if (remainingTime.value.inSeconds <= 0) {
         pauseAll();
         timer.cancel();
+        notification.showNotification(
+          title: 'Timer Finished',
+          body: 'The timer has ended.',
+        );
       } else {
         remainingTime.value = remainingTime.value - const Duration(seconds: 1);
       }
@@ -38,6 +52,10 @@ class AudioController extends GetxController {
     _timer?.cancel();
     remainingTime.value = Duration.zero;
     pauseAll();
+    notification.showNotification(
+      title: 'Timer Stopped',
+      body: 'The timer has been stopped.',
+    );
   }
 
   void playAll() {
