@@ -39,8 +39,8 @@ class AudioController extends GetxController {
         pauseAll();
         timer.cancel();
         notification.showNotification(
-          title: 'Timer Finished',
-          body: 'The timer has ended.',
+          title: 'Time Ended ⏰',
+          body: 'Your time is up. Would you like to start a new session?',
         );
       } else {
         remainingTime.value = remainingTime.value - const Duration(seconds: 1);
@@ -54,7 +54,7 @@ class AudioController extends GetxController {
     pauseAll();
     notification.showNotification(
       title: 'Timer Stopped',
-      body: 'The timer has been stopped.',
+      body: 'The time is ended.',
     );
   }
 
