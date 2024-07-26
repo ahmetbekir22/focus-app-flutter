@@ -26,13 +26,17 @@ class NotificationService {
 
   notificationDetails() {
     var vibrationPattern = Int64List.fromList([0, 1000, 500, 1000]);
-    //print("titreşim açıldı");
+    //print("Vibration");
     return NotificationDetails(
-        android: AndroidNotificationDetails('channelId', 'channelName',
-            importance: Importance.max,
-            priority: Priority.high,
-            vibrationPattern: vibrationPattern,
-            enableVibration: true),
+        android: AndroidNotificationDetails(
+          'channelId',
+          'channelName',
+          importance: Importance.max,
+          priority: Priority.high,
+          vibrationPattern: vibrationPattern,
+          enableVibration: true,
+          timeoutAfter: 3000,
+        ),
         iOS: const DarwinNotificationDetails());
   }
 

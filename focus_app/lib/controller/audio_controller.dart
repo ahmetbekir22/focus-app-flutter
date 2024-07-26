@@ -1,7 +1,7 @@
 import 'dart:async';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:get/get.dart';
-
 import '../services/notification_service.dart';
 
 class AudioController extends GetxController {
@@ -39,9 +39,10 @@ class AudioController extends GetxController {
         pauseAll();
         timer.cancel();
         notification.showNotification(
-          title: 'Time Ended ⏰',
+          title: 'Timer Ended ⏰',
           body: 'Your time is up. Would you like to start a new session?',
         );
+        //print("Notification");
       } else {
         remainingTime.value = remainingTime.value - const Duration(seconds: 1);
       }
@@ -53,9 +54,10 @@ class AudioController extends GetxController {
     remainingTime.value = Duration.zero;
     pauseAll();
     notification.showNotification(
-      title: 'Timer Stopped',
-      body: 'The time is ended.',
+      title: 'Timer Stopped ⏹️',
+      body: 'The timer has been stopped.',
     );
+    print("Notification with vibration should be shown now.");
   }
 
   void playAll() {
